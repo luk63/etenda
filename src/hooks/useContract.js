@@ -99,12 +99,82 @@ export function useContract() {
     }
   };
 
+  const submitBid = async ({ tenderId, amount, proposal }) => {
+    try {
+      if (!contract) {
+        throw new Error('Contract not initialized. Please check your wallet connection.');
+      }
+
+      if (!tenderId || !amount || !proposal) {
+        throw new Error('All fields are required');
+      }
+
+      // Convert amount from ETH to Wei
+      const amountInWei = ethers.utils.parseEther(amount.toString());
+
+      // Log the parameters for debugging
+      console.log('Submitting bid with params:', {
+        tenderId: tenderId.toString(),
+        amountInWei: amountInWei.toString(),
+        proposal
+      });
+
+      // First check if the tender exists and is open
+      const tenderDetails = await contract.getTenderDetails(tenderId);
+      if (!tenderDetails) {
+        throw new Error('Tender not found');
+      }
+
+      if (Number(tenderDetails.status) !== 0) {
+        throw new Error('Tender is not open for bidding');
+      }
+
+      // Check if the current user is the tender owner
+      const signer = await contract.signer.getAddress();
+      if (tenderDetails.owner === signer) {
+        throw new Error('Tender owner cannot submit a bid');
+      }
+
+      // Submit the bid
+      const tx = await contract.submitBid(
+        tenderId,
+        amountInWei,
+        proposal,
+        { 
+          gasLimit: 500000
+        }
+      );
+      
+      console.log('Transaction submitted:', tx.hash);
+      const receipt = await tx.wait();
+      console.log('Transaction confirmed:', receipt);
+      
+      return receipt;
+    } catch (error) {
+      console.error('Detailed error:', error);
+      
+      // Handle specific contract errors
+      if (error.data?.message?.includes('BidExceedsBudget')) {
+        throw new Error('Bid amount exceeds tender budget');
+      } else if (error.data?.message?.includes('TenderNotOpen')) {
+        throw new Error('This tender is not open for bidding');
+      } else if (error.data?.message?.includes('OwnerCannotBid')) {
+        throw new Error('Tender owner cannot submit a bid');
+      } else if (error.data?.message?.includes('DeadlinePassed')) {
+        throw new Error('Bidding deadline has passed');
+      }
+      
+      throw new Error(error.reason || error.message || 'Failed to submit bid');
+    }
+  };
+
   return {
     contract,
     error,
     postTender,
     getRecentTenders,
     isInitialized: !!contract,
-    contractAddress
+    contractAddress,
+    submitBid,
   };
 } 

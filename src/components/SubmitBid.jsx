@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { parseEther } from 'viem';
+import { formatEther, parseEther } from 'viem';
 import { useContract } from '../hooks/useContract';
 
 export default function SubmitBid({ tender, onClose }) {
@@ -9,28 +9,48 @@ export default function SubmitBid({ tender, onClose }) {
     proposal: ''
   });
   const [error, setError] = useState('');
-  
-  const { submitBid, isSubmitting } = useContract();
+  const { submitBid } = useContract();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     
     try {
-      const amountInWei = parseEther(formData.amount);
+      if (!formData.amount || Number(formData.amount) <= 0) {
+        throw new Error('Please enter a valid bid amount');
+      }
+
+      if (!formData.proposal.trim()) {
+        throw new Error('Please enter a proposal');
+      }
+
+      const bidAmountWei = parseEther(formData.amount);
+      
+      console.log('Tender details:', {
+        id: tender.id,
+        budget: tender.budget.toString(),
+        status: tender.status
+      });
+      
+      console.log('Bid details:', {
+        amount: bidAmountWei.toString(),
+        proposal: formData.proposal
+      });
+
+      if (bidAmountWei > tender.budget) {
+        throw new Error('Bid amount cannot exceed tender budget');
+      }
 
       await submitBid({
-        args: [
-          tender.id,
-          amountInWei,
-          formData.proposal
-        ]
+        tenderId: BigInt(tender.id),
+        amount: formData.amount,
+        proposal: formData.proposal.trim()
       });
 
       onClose();
     } catch (error) {
       console.error('Error submitting bid:', error);
-      setError(error.message || 'Failed to submit bid');
+      setError(error.message || 'Failed to submit bid. Please try again.');
     }
   };
 
@@ -73,7 +93,7 @@ export default function SubmitBid({ tender, onClose }) {
               value={formData.amount}
               onChange={handleChange}
               required
-              step="0.01"
+              step="0.000000000000000001"
               max={formatEther(tender.budget)}
               className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl 
                 text-white placeholder-gray-500 focus:outline-none focus:ring-2 
@@ -108,13 +128,12 @@ export default function SubmitBid({ tender, onClose }) {
             </button>
             <button
               type="submit"
-              disabled={isSubmitting}
               className="flex-1 px-4 py-2 text-sm font-medium text-white 
                 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl
                 hover:from-purple-600 hover:to-pink-600 transition-colors
                 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Submitting...' : 'Submit Bid'}
+              Submit Bid
             </button>
           </div>
         </form>

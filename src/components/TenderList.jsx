@@ -34,14 +34,18 @@ export default function TenderList({ searchQuery, statusFilter, isRefreshing }) 
 
       const tenderList = await contract.getRecentTenders(10);
 
-      const formattedTenders = tenderList.map(tender => ({
-        id: tender.id.toString(),
-        title: tender.title,
-        description: tender.description,
-        budget: tender.budget,
-        deadline: Number(tender.deadline),
-        status: Number(tender.status),
-        owner: tender.owner
+      const formattedTenders = await Promise.all(tenderList.map(async tender => {
+        const bidCount = await contract.getTenderBids(tender.id).then(bids => bids.length);
+        return {
+          id: tender.id.toString(),
+          title: tender.title,
+          description: tender.description,
+          budget: tender.budget,
+          deadline: Number(tender.deadline),
+          status: Number(tender.status),
+          owner: tender.owner,
+          bidCount
+        };
       }));
 
       setTenders(formattedTenders);
@@ -133,6 +137,13 @@ export default function TenderList({ searchQuery, statusFilter, isRefreshing }) 
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-400">Deadline</span>
                   <span className="text-white font-medium">{tender.deadline}</span>
+                </div>
+
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-400">Bids</span>
+                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400">
+                    {tender.bidCount} {tender.bidCount === 1 ? 'bid' : 'bids'}
+                  </span>
                 </div>
 
                 <div className="flex justify-between items-center text-sm">

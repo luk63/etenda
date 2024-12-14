@@ -168,6 +168,19 @@ export function useContract() {
     }
   };
 
+  const getTenderBids = async (tenderId) => {
+    try {
+      if (!contract) {
+        throw new Error('Contract not initialized');
+      }
+      const bids = await contract.getTenderBids(tenderId);
+      return bids.length;
+    } catch (error) {
+      console.error('Error getting tender bids:', error);
+      return 0;
+    }
+  };
+
   return {
     contract,
     error,
@@ -176,5 +189,6 @@ export function useContract() {
     isInitialized: !!contract,
     contractAddress,
     submitBid,
+    getTenderBids,
   };
 } 

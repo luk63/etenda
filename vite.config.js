@@ -10,32 +10,21 @@ export default defineConfig({
     },
   },
   build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
     rollupOptions: {
-      external: [
-        'react',
-        'react-dom',
-        'react-router-dom',
-        '@rainbow-me/rainbowkit',
-        '@tanstack/react-query',
-        'wagmi',
-        'viem',
-        'framer-motion',
-      ],
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          rainbow: ['@rainbow-me/rainbowkit'],
-          wagmi: ['wagmi', 'viem'],
-        },
+        manualChunks: undefined,
       },
     },
     commonjsOptions: {
-      include: [/node_modules/],
       transformMixedEsModules: true,
     },
-    sourcemap: true,
-    target: 'esnext',
-    minify: 'esbuild'
+    minify: 'esbuild',
+    sourcemap: false
   },
   optimizeDeps: {
     include: [
@@ -47,12 +36,6 @@ export default defineConfig({
       'wagmi',
       'viem',
       'framer-motion',
-    ],
-    esbuildOptions: {
-      target: 'esnext'
-    }
-  },
-  esbuild: {
-    target: 'esnext'
+    ]
   }
 })

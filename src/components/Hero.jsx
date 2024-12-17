@@ -57,7 +57,7 @@ export default function Hero() {
             </motion.div>
 
             <motion.div 
-              className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+              className="mt-10 flex justify-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
@@ -65,7 +65,10 @@ export default function Hero() {
               <Button 
                 variant="primary" 
                 onClick={handleStartNow}
-                className="w-full sm:w-auto px-8 py-4 text-lg font-medium bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-200 flex items-center justify-center gap-2"
+                className="px-8 py-4 text-lg font-medium bg-gradient-to-r from-purple-500 to-pink-500 
+                  hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 
+                  transition-all duration-200 flex items-center justify-center gap-2
+                  shadow-lg shadow-purple-500/20"
               >
                 {isConnected ? 'Go to Dashboard' : 'Connect Wallet'}
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -75,16 +78,6 @@ export default function Hero() {
                       : "M12 15v2m0 0l3 3m-3-3l-3 3m0-6v2m0 0l3 3m-3-3l-3 3m15-9a9 9 0 11-18 0 9 9 0 0118 0z"
                     }
                   />
-                </svg>
-              </Button>
-              <Button 
-                variant="secondary" 
-                onClick={() => document.getElementById('features').scrollIntoView({ behavior: 'smooth' })}
-                className="w-full sm:w-auto px-8 py-4 text-lg font-medium bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transform hover:scale-105 transition-all duration-200 text-white flex items-center justify-center gap-2"
-              >
-                Learn More
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </Button>
             </motion.div>

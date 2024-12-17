@@ -8,7 +8,6 @@ import RecentTenders from '../components/RecentTenders';
 import Pricing from '../components/Pricing';
 import FAQ from '../components/FAQ';
 import CTA from '../components/CTA';
-import Footer from '../components/Footer';
 
 export default function Landing() {
   return (
@@ -22,7 +21,6 @@ export default function Landing() {
       <Pricing />
       <FAQ />
       <CTA />
-      <Footer />
     </main>
   );
 } 

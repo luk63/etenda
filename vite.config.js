@@ -13,29 +13,17 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, 'index.html'),
-      },
-      output: {
-        manualChunks: undefined,
-      },
+      input: path.resolve(__dirname, 'index.html'),
     },
-    commonjsOptions: {
-      transformMixedEsModules: true,
-    },
-    minify: 'esbuild',
-    sourcemap: false
+    chunkSizeWarningLimit: 1600,
+    target: 'esnext',
+  },
+  server: {
+    port: 3000
   },
   optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'react-router-dom',
-      '@rainbow-me/rainbowkit',
-      '@tanstack/react-query',
-      'wagmi',
-      'viem',
-      'framer-motion',
-    ]
+    esbuildOptions: {
+      target: 'esnext'
+    }
   }
 })

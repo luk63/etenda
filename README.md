@@ -1,8 +1,35 @@
-# React + Vite
+# Etenda - Blockchain-Powered Tender Management Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Etenda is a decentralized platform that revolutionizes tender management using blockchain technology. It provides a secure, transparent, and efficient way for businesses to manage their tender processes.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔐 Secure blockchain-based tender submissions
+- 🌐 Multi-chain support (Ethereum, Base)
+- 👛 Multiple wallet connections (MetaMask, WalletConnect, Coinbase, etc.)
+- 📊 Real-time tender tracking
+- 💼 Smart contract-powered transactions
+- 🎨 Modern, responsive UI with Tailwind CSS
+
+## Tech Stack
+
+- **Frontend**: React + Vite
+- **Styling**: Tailwind CSS
+- **Web3**:
+  - Wagmi v2
+  - Viem
+  - RainbowKit
+- **State Management**: TanStack Query
+- **Smart Contracts**: Solidity + Hardhat
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18+)
+- npm or yarn
+- MetaMask or another Web3 wallet
+
+### Installation
+
+1. Clone the repository:

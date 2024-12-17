@@ -1,9 +1,14 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   build: {
     rollupOptions: {
       external: [
@@ -15,9 +20,22 @@ export default defineConfig({
         'wagmi',
         'viem',
         'framer-motion',
-        // Add any other external dependencies that might be causing issues
       ],
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          rainbow: ['@rainbow-me/rainbowkit'],
+          wagmi: ['wagmi', 'viem'],
+        },
+      },
     },
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true,
+    },
+    sourcemap: true,
+    target: 'esnext',
+    minify: 'esbuild'
   },
   optimizeDeps: {
     include: [
@@ -30,5 +48,11 @@ export default defineConfig({
       'viem',
       'framer-motion',
     ],
+    esbuildOptions: {
+      target: 'esnext'
+    }
   },
+  esbuild: {
+    target: 'esnext'
+  }
 })

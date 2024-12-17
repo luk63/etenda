@@ -13,11 +13,14 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     rollupOptions: {
-      external: ['ethers'],
-      input: path.resolve(__dirname, 'index.html'),
+      external: [
+        'wagmi',
+        'viem'
+      ],
       output: {
         globals: {
-          ethers: 'ethers'
+          'wagmi': 'wagmi',
+          'viem': 'viem'
         }
       }
     },
@@ -25,15 +28,10 @@ export default defineConfig({
       include: [/node_modules/],
       transformMixedEsModules: true
     },
-    chunkSizeWarningLimit: 1600,
-    target: 'esnext',
-  },
-  server: {
-    port: 3000
+    chunkSizeWarningLimit: 1600
   },
   optimizeDeps: {
     include: [
-      'ethers',
       'react',
       'react-dom',
       'react-router-dom',
@@ -42,9 +40,6 @@ export default defineConfig({
       'wagmi',
       'viem',
       'framer-motion'
-    ],
-    esbuildOptions: {
-      target: 'esnext'
-    }
+    ]
   }
 })

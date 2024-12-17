@@ -13,7 +13,17 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     rollupOptions: {
+      external: ['ethers'],
       input: path.resolve(__dirname, 'index.html'),
+      output: {
+        globals: {
+          ethers: 'ethers'
+        }
+      }
+    },
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true
     },
     chunkSizeWarningLimit: 1600,
     target: 'esnext',
@@ -22,6 +32,17 @@ export default defineConfig({
     port: 3000
   },
   optimizeDeps: {
+    include: [
+      'ethers',
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@rainbow-me/rainbowkit',
+      '@tanstack/react-query',
+      'wagmi',
+      'viem',
+      'framer-motion'
+    ],
     esbuildOptions: {
       target: 'esnext'
     }
